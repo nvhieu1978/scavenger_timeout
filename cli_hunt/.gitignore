@@ -1,0 +1,14 @@
+# Rust
+target/
+Cargo.lock
+
+# Python
+__pycache__/
+
+# Misc
+*.log
+challenges.json
+challenges.json.journal
+web/
+
+.DS_Store

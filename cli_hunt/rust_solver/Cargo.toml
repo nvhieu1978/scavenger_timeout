@@ -1,0 +1,20 @@
+[package]
+name = "ashmaize-solver"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ashmaize = { path = "../../" } # This points to the root ashmaize crate
+hex = "0.4"
+clap = { version = "4.0", features = ["derive"] }
+rayon = "1.11.0"
+
+[build]
+rustflags = ["-C", "target-cpu=native", "-C", "link-arg=-s"]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+incremental = false
