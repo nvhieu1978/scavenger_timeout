@@ -36,6 +36,7 @@ DEFAULT_STATS_INTERVAL = 60 * 60  # 60 minutes
 NONCE_MULTIPLIER = 1 
 # Fallback nếu không tính được độ khó
 DEFAULT_NONCE_CHUNK = 2**21 # 16,777,216 (fallback an toàn 24 bit)
+_test_DEFAULT_NONCE_CHUNK = 2**21 # 16,777,216 (fallback an toàn 24 bit)
 # --- KẾT THÚC THAM SỐ MỚI ---
 
 
@@ -668,10 +669,25 @@ def stats_worker(db_manager, stop_event, interval, tui_app):
         addresses = db_manager.get_addresses()
         tui_app.post_message(LogMessage("Updating wallet statistics..."))
         for address in addresses:
-            (crypto_receipts, night) = fetch_wallet_statistics(address)
-            if crypto_receipts is not None and night is not None:
+            #(crypto_receipts, night) = fetch_wallet_statistics(address)
+            #if crypto_receipts is not None and night is not None:
+            #    db_manager.update_wallet_statistics(address, crypto_receipts, night)
+            
+            # --- SỬA LỖI (BẮT ĐẦU) ---
+            # 1. Gọi hàm và lưu kết quả vào MỘT biến
+            stats_result = fetch_wallet_statistics(address)
+            
+            # 2. KIỂM TRA xem kết quả có phải là None không (nghĩa là có lỗi xảy ra)
+            if stats_result is not None:
+                # 3. Chỉ khi không phải None, chúng ta mới giải nén (unpack) nó
+                (crypto_receipts, night) = stats_result
                 db_manager.update_wallet_statistics(address, crypto_receipts, night)
-
+            else:
+                # 4. (Nên có) Gửi log nếu không lấy được
+                short_address = f"{address[:10]}…{address[-6:]}"
+                tui_app.post_message(LogMessage(f"⚠️ Stats update failed for {short_address} (API error or timeout)"))
+            # --- KẾT THÚC SỬA LỖI ---
+            
         # Get all stats and calculate total
         (all_receipts, all_night) = db_manager.get_all_wallet_statistics()
         total_receipts = sum(all_receipts.values())
