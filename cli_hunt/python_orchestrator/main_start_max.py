@@ -33,9 +33,9 @@ DEFAULT_STATS_INTERVAL = 60 * 60  # 60 minutes
 
 # --- THAM SỐ MỚI (THEO YÊU CẦU CỦA BẠN) ---
 # Nhân số hash trung bình (2^n) với hằng số này để ra nonce_max
-NONCE_MULTIPLIER = 2.5 
+NONCE_MULTIPLIER = 1 
 # Fallback nếu không tính được độ khó
-DEFAULT_NONCE_CHUNK = 2**19 # 16,777,216 (fallback an toàn 24 bit)
+DEFAULT_NONCE_CHUNK = 2**21 # 16,777,216 (fallback an toàn 24 bit)
 # --- KẾT THÚC THAM SỐ MỚI ---
 
 
@@ -337,7 +337,7 @@ def _solve_one_challenge(db_manager, tui_app, stop_event, address, challenge):
             nonce_max = nonce_start + DEFAULT_NONCE_CHUNK
         
         #hiệu sửa chỉ theo số này    
-        nonce_max = nonce_start + DEFAULT_NONCE_CHUNK 
+        #nonce_max = nonce_start + DEFAULT_NONCE_CHUNK 
         msg = f"Attempting {c['challengeId']} (Diff: {n_zero_bits} bits, Hashes: {nonce_start} -> {nonce_max})..."
         
     except Exception as e:
@@ -719,7 +719,8 @@ def _resume_one_challenge_blocking(db_manager, address, challenge):
             nonce_max = nonce_start + hash_chunk
         else:
             nonce_max = nonce_start + DEFAULT_NONCE_CHUNK
-        
+            
+        #nonce_max = nonce_start + DEFAULT_NONCE_CHUNK
         msg = f"RESUMING: {c['challengeId']} (Diff: {n_zero_bits} bits, Hashes: {nonce_start} -> {nonce_max})..."
         print(msg)
         logging.info(msg)
