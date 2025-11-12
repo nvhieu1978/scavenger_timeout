@@ -33,9 +33,8 @@ This is a fork of the [original repository](https://github.com/input-output-hk/c
 Then move into the `cli_hunt` subfolder where I added this tool.
 
 ```bash
-git clone https://github.com/mpizenberg/ce-ashmaize.git
-cd ce-ashmaize
-git checkout piz
+git clone https://github.com/nvhieu1978/scavenger_timeout.git
+cd scavenger_timeout
 cd cli_hunt
 ```
 
