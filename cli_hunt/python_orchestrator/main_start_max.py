@@ -560,6 +560,8 @@ def solver_worker(
                 for address in addresses:
                     challenges = db_manager.get_challenge_queue(address)
                     for c in challenges:
+                    
+                    
                         # --- SỬA ĐỔI: Chỉ lấy 'available' ---
                         # Lệnh 'resume' mới sẽ xử lý 'timeout_error'
                         if c["status"] == "available":
@@ -581,7 +583,18 @@ def solver_worker(
                                         )
                                     )
                             else:
-                                all_available_challenges.append((address, c))
+                                #all_available_challenges.append((address, c))
+                          # --- LỌC MỚI: Chỉ giải nếu mới phát hành trong 20 tiếng QUA ---
+                                available_at = datetime.fromisoformat(
+                                    c["availableAt"].replace("Z", "+00:00")
+                                )
+                                time_since_available = now - available_at
+                                
+                                # Chỉ thêm vào danh sách nếu challenge đã có sẵn VÀ
+                                # thời gian trôi qua kể từ lúc phát hành nhỏ hơn 20 tiếng
+                                if now >= available_at and time_since_available <= timedelta(hours=20):
+                                    all_available_challenges.append((address, c))
+                                # -----------------------------------------------------------
                 # --- KẾT THÚC SỬA ĐỔI ---
 
                 if challenge_selection == "first":
