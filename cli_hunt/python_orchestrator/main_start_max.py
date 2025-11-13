@@ -592,7 +592,7 @@ def solver_worker(
                                 
                                 # Chỉ thêm vào danh sách nếu challenge đã có sẵn VÀ
                                 # thời gian trôi qua kể từ lúc phát hành nhỏ hơn 20 tiếng
-                                if now >= available_at and time_since_available <= timedelta(hours=20):
+                                if now >= available_at and time_since_available <= timedelta(hours=22):
                                     all_available_challenges.append((address, c))
                                 # -----------------------------------------------------------
                 # --- KẾT THÚC SỬA ĐỔI ---
